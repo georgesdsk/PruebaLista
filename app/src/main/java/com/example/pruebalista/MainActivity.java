@@ -1,9 +1,13 @@
 package com.example.pruebalista;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
@@ -13,42 +17,105 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.pruebalista.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
-    private String[] ciudades;
+   // private String[] ciudades;
+    private List<Vista> vistas;
     ListView lw;
     TextView tv;
 
-            //con array adapter(this) android.R.layout..(2º) el array de datos (3º)
+
             // el set contenView tiene que ir antes que el findView..
             //donde ponerle a la lista el adaptador
-            // para
+            // para personalizar el muestreo de informacion tenemos que crear un nuevo adapter, o sobrescribir el getView del
+            // ArrayAdapter
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ciudades= new String[]{"Micasa", "Carro", "casoplon", "Micasa", "Carro", "casoplon", "Micasa", "Carro", "casoplon", "Micasa", "Carro", "casoplon", "Micasa", "Carro", "casoplon", "Micasa", "Carro", "casoplon"};
-        ArrayAdapter a = new ArrayAdapter(this, android.R.layout.simple_list_item_1, ciudades);
-        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.row, R.id.textView2, ciudades);
+        //ciudades= new String[]{"Micasa", "Carro", "casoplon", "Micasa", "Carro", "casoplon", "Micasa", "Carro", "casoplon", "Micasa", "Carro", "casoplon", "Micasa", "Carro", "casoplon", "Micasa", "Carro", "casoplon"};
+        //ArrayAdapter a = new ArrayAdapter(this, android.R.layout.simple_list_item_1, ciudades);
+        //ArrayAdapter adapter = new ArrayAdapter(this, R.layout.row, R.id.textView2, ciudades);
+
+        vistas = new ArrayList<Vista>(); // agragar un boton que añada uno
+
+        vistas.add(new Vista(R.drawable.casoplon, 2000, "Casoplon"));
+        vistas.add(new Vista(R.drawable.coche, 200, "Carro"));
+        vistas.add(new Vista(R.drawable.coche, 200, "Carro"));
+        vistas.add(new Vista(R.drawable.descarga, 5, "Casita"));
+        vistas.add(new Vista(R.drawable.descarga, 5, "Casita"));
+        vistas.add(new Vista(R.drawable.coche, 200, "Carro"));
+        vistas.add(new Vista(R.drawable.casoplon, 2000, "Casoplon"));
+        vistas.add(new Vista(R.drawable.casoplon, 2000, "Casoplon"));
+        vistas.add(new Vista(R.drawable.coche, 200, "Carro"));
+        vistas.add(new Vista(R.drawable.coche, 200, "Carro"));
+        vistas.add(new Vista(R.drawable.descarga, 5, "Casita"));
+        vistas.add(new Vista(R.drawable.descarga, 5, "Casita"));
+        vistas.add(new Vista(R.drawable.coche, 200, "Carro"));
+        vistas.add(new Vista(R.drawable.casoplon, 2000, "Casoplon"));
 
         lw = findViewById(R.id._dynamic);
         tv= findViewById(R.id.textView);
-        lw.setAdapter(adapter);
-        
+        //lw.setAdapter(adapter);
+       // lw.setAdapter(new AdaptadorPersonalizado(this, R.layout.row, R.id.textView2, ciudades));
+        lw.setAdapter(new AdaptadorPersonalizado(this, R.layout.row, R.id.textView2, vistas));
+
         lw.setOnItemClickListener(this::clickLista);
-        
-        
+    }
+
+
+
+    private class AdaptadorPersonalizado extends ListAdapter {
+        public AdaptadorPersonalizado(Context, int row, int textView2, List<Vista> vistas) {
+        }
+
+
+
+    }
+
+
+    /*
+    private class AdaptadorPersonalizado extends ArrayAdapter {
+
+        public AdaptadorPersonalizado(Context c, int row, int textView2, String[] ciudades) {
+            super(c,row,textView2,ciudades);
+        }
+
+
+        @Override
+        public View getView(int position,  View convertView, ViewGroup parent) {
+            View row = super.getView(position, convertView, parent);
+            ImageView icon = row.findViewById(R.id.imageView);
+
+
+
+            switch (ciudades[position]){
+
+                case "Micasa":{ icon.setImageResource(R.drawable.descarga);}break;
+                case "Carro":{icon.setImageResource(R.drawable.coche);}break;
+                case "casoplon":{icon.setImageResource(R.drawable.casoplon);}break;
+
+            }
+
+
+            return row;
+        }
     }
 
     private void clickLista(AdapterView<?> adapterView, View view, int i, long l) {
@@ -57,5 +124,36 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    */
+    /**
+     * Vista que va a contener la informacion de cada objeto guardado con su referencia a la imagen
+     *
+     */
+    private class Vista {
+
+        private int resourse, precio;
+        private String nombre;
+
+        public Vista(int resourse, int precio, String nombre) {
+            this.resourse = resourse;
+            this.precio = precio;
+            this.nombre = nombre;
+        }
+
+        public int getResourse() {
+            return resourse;
+        }
+
+        public int getPrecio() {
+            return precio;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+
+    }
 
 }
+
