@@ -75,35 +75,52 @@ public class MainActivity extends AppCompatActivity {
         //lw.setAdapter(adapter);
        // lw.setAdapter(new AdaptadorPersonalizado(this, R.layout.row, R.id.textView2, ciudades));
         lw.setAdapter(new AdaptadorPersonalizado(this, R.layout.row, R.id.textView2, vistas));
+        // no me reconoce el R.id.TextView2
 
-        lw.setOnItemClickListener(this::clickLista);
+
+        lw.setOnItemClickListener(this::clickVista);
     }
 
 
 
-    private class AdaptadorPersonalizado extends ListAdapter {
-        public AdaptadorPersonalizado(Context, int row, int textView2, List<Vista> vistas) {
+    private class AdaptadorPersonalizado extends ArrayAdapter {
+        public AdaptadorPersonalizado(Context c, int row, int textView2, List<Vista> vistas) {
+
+            /**
+             * GetViewTypeCOunt() el numero total de layouts hay
+             * getItemViewType(posicion) para esta vista que layout le corresponde
+             */
+            super(c,row,textView2,vistas);
         }
 
 
+        @Override
+        public View getView(int position,  View convertView, ViewGroup parent) {/**
+         El convertView es la vista anterior para reciclarla
 
+         */
+            View vista = super.getView(position, convertView, parent);
+            ImageView icon = vista.findViewById(R.id.imageView);
+            TextView tv = vista.findViewById(R.id.textView3);
+
+            icon.setImageResource(vistas.get(position).getResourse());
+            tv.setText(Integer.toString(vistas.get(position).precio));
+
+            return vista;
+        }
     }
 
-
-    /*
+   /*
     private class AdaptadorPersonalizado extends ArrayAdapter {
 
         public AdaptadorPersonalizado(Context c, int row, int textView2, String[] ciudades) {
             super(c,row,textView2,ciudades);
         }
 
-
         @Override
         public View getView(int position,  View convertView, ViewGroup parent) {
             View row = super.getView(position, convertView, parent);
             ImageView icon = row.findViewById(R.id.imageView);
-
-
 
             switch (ciudades[position]){
 
@@ -112,8 +129,6 @@ public class MainActivity extends AppCompatActivity {
                 case "casoplon":{icon.setImageResource(R.drawable.casoplon);}break;
 
             }
-
-
             return row;
         }
     }
@@ -121,10 +136,14 @@ public class MainActivity extends AppCompatActivity {
     private void clickLista(AdapterView<?> adapterView, View view, int i, long l) {
 
         tv.setText(ciudades[i]);
+    }
+    */
 
+    private void clickVista(AdapterView<?> adapterView, View view, int i, long l) {
+
+        tv.setText(vistas.get(i).getNombre());
     }
 
-    */
     /**
      * Vista que va a contener la informacion de cada objeto guardado con su referencia a la imagen
      *
